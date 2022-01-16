@@ -207,6 +207,16 @@ static int print_cpuinfo(void)
 }
 #endif
 
+#if defined(CONFIG_ROCKCHIP_PRELOADER_SERIAL)
+static int announce_pre_serial(void)
+{
+	if (gd && gd->serial.using_pre_serial)
+		printf("PreSerial: %d\n", gd->serial.id);
+
+	return 0;
+}
+#endif
+
 static int announce_dram_init(void)
 {
 	puts("DRAM:  ");
@@ -874,6 +884,9 @@ static const init_fnc_t init_sequence_f[] = {
 #endif
 #if defined(CONFIG_VID) && !defined(CONFIG_SPL)
 	init_func_vid,
+#endif
+#if defined(CONFIG_ROCKCHIP_PRELOADER_SERIAL)
+	announce_pre_serial,
 #endif
 	announce_dram_init,
 	dram_init,		/* configure available RAM banks */
